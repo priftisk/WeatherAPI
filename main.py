@@ -6,7 +6,7 @@ import tkinter as tk
 
 
 def kelvinToCelsius(kelvin):
-    return kelvin - 273.15
+    return round(kelvin - 273.15)
 
 
 def get_weather(city,api_key):
@@ -15,7 +15,23 @@ def get_weather(city,api_key):
     response = requests.get(URL).json()
     return response
 
+def display_city_name(city,root):
+    city_label= tk.Label(root,text = f'{city}')
+    city_label.config(font=('Consolas',28))
+    city_label.pack(side='top')
 
+def display_stats(temp,feels_like,humidity,root):
+    temp_label = tk.Label(root,text=f'{temp} C')
+    feels_like_label = tk.Label(root,text= f'Feels like {feels_like} C')
+    humidity_label = tk.Label(root,text = f'{humidity}')
+
+    temp_label.config(font=('Consolas',20))
+    feels_like_label.config(font=('Consolas',20))
+    humidity_label.config(font=('Consolas',20))
+
+    temp_label.pack(side='top')
+    feels_like_label.pack(side='top')
+    humidity_label.pack(side='top')
 
 
 
@@ -32,11 +48,19 @@ def main():
     feels_like = weather_data['main']['feels_like']
     humidity = weather_data['main']['humidity']
     wind_speed = weather_data['wind']['speed']
-    city_name = weather_data['name']\
+    city_name = weather_data['name']
     
-    window = tk.Tk()
+    temp_celsius = kelvinToCelsius(temp_kelvin)
+    feels_like_celsius = kelvinToCelsius(feels_like)
+
+    root = tk.Tk()
+    root.geometry("300x300")
+    root.title(f'{city_name} Weather')
     
-    window.mainloop()
+    display_city_name(city_name,root)
+    display_stats(temp_celsius,feels_like_celsius,humidity,root)
+
+    root.mainloop()
 
 
 
