@@ -1,20 +1,24 @@
 import requests
 import datetime as dt
+import json
 
 def kelvinToCelsius(kelvin):
     return kelvin - 273.15
 
 
-BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
 API_KEY = open('api_key', 'r').read()
-CITY = input("City: ")
+CITY_NAME = input("City: ")
 
-URL = BASE_URL + "q=" + CITY + "&appid=" + API_KEY 
+def get_weather(city,api_key):
+    URL = f"http://api.openweathermap.org/data/2.5/weather?q={city} +&appid={api_key}"
 
-response = requests.get(URL).json()
-    
-temperature = response['main']['temp']
-cityName = response['name']
+    response = requests.get(URL).json()
+    return response
 
-print(round(kelvinToCelsius(temperature)))
-print(cityName)
+
+
+
+weather_data = get_weather(CITY_NAME,API_KEY)  
+
+
+print(weather_data)
