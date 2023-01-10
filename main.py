@@ -9,16 +9,22 @@ def kelvinToCelsius(kelvin):
     return round(kelvin - 273.15)
 
 
-def get_weather(city,api_key):
-    URL = f"http://api.openweathermap.org/data/2.5/weather?q={city} +&appid={api_key}"
+def get_weather(canvas):
+    city_name = textEntry.get()
+    URL = f"http://api.openweathermap.org/data/2.5/weather?q={city_name} +&appid=0afee7378831f489d9d177aaf2d7556a"
+    weather_data = requests.get(URL).json()
+    coord = weather_data['coord']
+    weather_desc = weather_data['weather'][0]['description']
+    temp = int(weather_data['main']['temp']- 273.15)
+    feels_like = weather_data['main']['feels_like']
+    humidity = weather_data['main']['humidity']
+    wind_speed = weather_data['wind']['speed']
+    city_name = weather_data['name']
 
-    response = requests.get(URL).json()
-    return response
-
-def display_city_name(city,root):
-    city_label= tk.Label(root,text = f'{city}')
-    city_label.config(font=('Consolas',28))
-    city_label.pack(side='top')
+    final_weather_data =  weather_desc + "\n" + str(temp) + "°C" 
+    label1.config(text = final_weather_data)
+    
+    
 
 def display_stats(temp,feels_like,humidity,root):
     temp_label = tk.Label(root,text=f'{temp} C')
@@ -35,34 +41,19 @@ def display_stats(temp,feels_like,humidity,root):
 
 
 
-def main():
 
-    API_KEY = open('api_key', 'r').read()
-    CITY_NAME = input("City: ")
+canvas =tk.Tk()
+canvas.geometry("500x500")
+canvas.title("Current Weather Conditions")
 
-    weather_data = get_weather(CITY_NAME,API_KEY)  
-
-    coord = weather_data['coord']
-    weather_desc = weather_data['weather'][0]['description']
-    temp_kelvin = weather_data['main']['temp']
-    feels_like = weather_data['main']['feels_like']
-    humidity = weather_data['main']['humidity']
-    wind_speed = weather_data['wind']['speed']
-    city_name = weather_data['name']
-    
-    temp_celsius = kelvinToCelsius(temp_kelvin)
-    feels_like_celsius = kelvinToCelsius(feels_like)
-
-    root = tk.Tk()
-    root.geometry("300x300")
-    root.title(f'{city_name} Weather')
-    
-    display_city_name(city_name,root)
-    display_stats(temp_celsius,feels_like_celsius,humidity,root)
-
-    root.mainloop()
+textEntry = tk.Entry(canvas,font =('Arial',15,'bold') )
+textEntry.pack(pady=20)
+textEntry.focus()
+textEntry.bind('<Return>', get_weather)
 
 
+label1 = tk.Label(canvas, font=('Arial',15,'bold') )
+label1.pack()
+canvas.mainloop()
 
-if __name__ == "__main__":
-    main()
+
