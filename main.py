@@ -25,8 +25,9 @@ def get_weather(canvas):
     wind_speed = weather_data['wind']['speed']
     city_name = weather_data['name']
 
-    final_weather_data =  weather_desc + "\n" + str(temp) + "°C" +"\n" + "Humidity: "+str(humidity) + "%"+ "\n"
+    final_weather_data =  "City: " + city_name + "\n" + "Desc: " + weather_desc + "\n" + "Temp: " + str(temp) + "°C" +"\n" + "Humidity: "+str(humidity) + "%"+ "\n" + "Wind speed: "+ str(wind_speed) 
     label1.config(text = final_weather_data)
+    textEntry.delete(0,tk.END)
     
     
 
@@ -37,6 +38,7 @@ def display_stats(temp,feels_like,humidity,root):
 
     temp_label.config(font=('Consolas',20))
     feels_like_label.config(font=('Consolas',20))
+
     humidity_label.config(font=('Consolas',20))
 
     temp_label.pack(side='top')
@@ -50,13 +52,16 @@ canvas =tk.Tk()
 canvas.geometry("500x500")
 canvas.title("Current Weather Conditions")
 
-textEntry = tk.Entry(canvas,font =('Arial',15,'bold') )
-textEntry.pack(pady=20)
+textEntry = tk.Entry(canvas,font =('Arial',20,'bold') )
 textEntry.focus()
 textEntry.bind('<Return>', get_weather)
+textEntry.pack(pady=20)
+
+sumbitButton =tk.Button()
 
 
-label1 = tk.Label(canvas, font=('Arial',15,'bold') )
+
+label1 = tk.Label(canvas, font=('Arial',20,'bold') )
 label1.pack()
 canvas.mainloop()
 
