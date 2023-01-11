@@ -2,6 +2,7 @@ import requests
 import datetime as dt
 import json
 import tkinter as tk
+import configparser
 
 
 
@@ -11,7 +12,10 @@ def kelvinToCelsius(kelvin):
 
 def get_weather(canvas):
     city_name = textEntry.get()
-    URL = f"http://api.openweathermap.org/data/2.5/weather?q={city_name} +&appid=0afee7378831f489d9d177aaf2d7556a"
+    configParser = configparser.ConfigParser()
+    configParser.read('api_key.ini')
+    api_key = configParser['api']['api_key']
+    URL = f"http://api.openweathermap.org/data/2.5/weather?q={city_name} +&appid={api_key}"
     weather_data = requests.get(URL).json()
     coord = weather_data['coord']
     weather_desc = weather_data['weather'][0]['description']
@@ -21,7 +25,7 @@ def get_weather(canvas):
     wind_speed = weather_data['wind']['speed']
     city_name = weather_data['name']
 
-    final_weather_data =  weather_desc + "\n" + str(temp) + "°C" 
+    final_weather_data =  weather_desc + "\n" + str(temp) + "°C" +"\n" + "Humidity: "+str(humidity) + "%"+ "\n"
     label1.config(text = final_weather_data)
     
     
